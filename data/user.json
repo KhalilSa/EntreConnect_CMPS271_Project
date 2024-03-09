@@ -1,0 +1,22 @@
+{
+  "id": "u2",
+  "name": "Alan Smith",
+  "position": "CS graduate",
+  "image": "https://dummyimage.com/50x50/000/fff",
+  "backImage": "https://dummyimage.com/600x400/000/fff",
+  "about": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry s standard dummy text ever since the 1500s, when an unknown printer took a galley",
+  "experience": [
+    {
+      "id": "e1",
+      "title": "CS Society Cabinet Member",
+      "companyName": "AUB Clubs",
+      "companyImage": "https://dummyimage.com/600x400/000/fff"
+    },
+    {
+      "id": "e2",
+      "title": "Game X Developer",
+      "companyName": "X studio",
+      "companyImage": "https://dummyimage.com/600x400/000/fff"
+    }
+  ]
+}
