@@ -12,6 +12,8 @@ export default {
     tabIconSelected: eminence,
     borderColor: raisenBlack,
     feedBackground: white,
+    postIconDefault: charcoalGray,
+    postIconSelected: eminence,
   },
   dark: {
     text: white,
@@ -21,5 +23,7 @@ export default {
     tabIconSelected: white,
     borderColor: white,
     feedBackground: raisenBlack,
+    postIconDefault: white,
+    postIconSelected: eminence,
   },
 };
