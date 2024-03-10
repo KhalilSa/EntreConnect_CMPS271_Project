@@ -10,6 +10,8 @@ export default {
     tint: eminence,
     tabIconDefault: charcoalGray,
     tabIconSelected: eminence,
+    borderColor: raisenBlack,
+    feedBackground: white,
   },
   dark: {
     text: white,
@@ -17,5 +19,7 @@ export default {
     tint: white,
     tabIconDefault: eminence,
     tabIconSelected: white,
+    borderColor: white,
+    feedBackground: raisenBlack,
   },
 };

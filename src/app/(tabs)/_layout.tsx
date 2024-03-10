@@ -30,6 +30,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
+          title:"Home",
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
           tabBarShowLabel: false,
           headerRight: () => (
@@ -51,13 +52,23 @@ export default function TabLayout() {
       <Tabs.Screen
           name='notification'
           options={{
+            title:"Notification",
             tabBarIcon: ({ color }) => <TabBarIcon name="bell" color={color} />,
+            tabBarShowLabel: false,
+          }}
+      />
+      <Tabs.Screen
+          name='post'
+          options={{
+            title:"post",
+            tabBarIcon: ({ color }) => <TabBarIcon name="plus" color={color} />,
             tabBarShowLabel: false,
           }}
       />
       <Tabs.Screen
           name='chat'
           options={{
+            title:"Chat",
             tabBarIcon: ({ color }) => <TabBarIcon name="comments" color={color} />,
             tabBarShowLabel: false,
           }}
@@ -65,6 +76,7 @@ export default function TabLayout() {
       <Tabs.Screen
           name='settings'
           options={{
+            title:"Settings",
             tabBarIcon: ({ color }) => <TabBarIcon name="cog" color={color} />,
             tabBarShowLabel: false,
           }}
