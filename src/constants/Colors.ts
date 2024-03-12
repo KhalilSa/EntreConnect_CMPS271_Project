@@ -2,6 +2,7 @@ const eminence = '#631D76';
 const charcoalGray = '#2E2532';
 const white = '#FBFBFB';
 const raisenBlack = '#201A23';
+const pantone = '#9E4770';
 
 export default {
   light: {
@@ -12,7 +13,7 @@ export default {
     tabIconSelected: eminence,
     borderColor: raisenBlack,
     feedBackground: white,
-    postIconDefault: charcoalGray,
+    postIconDefault: pantone,
     postIconSelected: eminence,
   },
   dark: {
@@ -24,6 +25,6 @@ export default {
     borderColor: white,
     feedBackground: raisenBlack,
     postIconDefault: white,
-    postIconSelected: eminence,
+    postIconSelected: pantone,
   },
 };

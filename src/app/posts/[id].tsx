@@ -2,7 +2,7 @@ import { Text } from '@/components/Themed';
 import { useLocalSearchParams } from 'expo-router';
 import posts from '../../../data/posts.json';
 import PostListItem from '@/components/PostListItem';
-import { ScrollView } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 
 const PostDetails = () => {
   const { id } = useLocalSearchParams();
@@ -14,9 +14,15 @@ const PostDetails = () => {
 
   return (
     <ScrollView>
-        <PostListItem post={post} />
+        <PostListItem post={post} style={styles.postCard} />
     </ScrollView>
   );
 };
+
+const styles = StyleSheet.create({
+    postCard: {
+        alignSelf: 'center',
+    }
+});
 
 export default PostDetails;
