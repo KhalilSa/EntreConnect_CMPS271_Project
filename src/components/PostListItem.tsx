@@ -4,10 +4,12 @@ import { Post } from '@/types'
 import { useColorScheme } from './useColorScheme';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Colors from '@/constants/Colors';
-import { Link } from 'expo-router';
+import { Link, useNavigation } from 'expo-router';
+
 
 type PostListItemProps = {
     post: Post;
+    style: ViewStyle;
 }
 
 type FooterButtonProps = {
@@ -26,23 +28,26 @@ function FooterButton({ text, icon, footerBtnStyle, colorScheme }: FooterButtonP
     );
 }
 
-export default function PostListItem({ post }: PostListItemProps) {
+export default function PostListItem({ post, style }: PostListItemProps) {
     const colorScheme = Colors[useColorScheme() ?? 'light'];
     const styles = PostStyles();
+    const combinedPostCardStyles = [styles.postCard, style];
     return (
         <Link href={{
             pathname: "posts/[id]",
             params: {id: post.id}
         }} asChild>
-            <Pressable style={styles.postCard}>
+            <Pressable style={StyleSheet.flatten(combinedPostCardStyles)}>
                 {/* Header */}
-                <View style={styles.header}>
-                    <Image source={{uri: post.author.image}} style={styles.userImage}></Image>
-                    <View>
-                        <Text style={styles.username}>{post.author.name}</Text>
-                        <Text>{post.author.position}</Text>
-                    </View>
-                </View>
+                <Link href={`users/${post.author.id}`}>
+                    <Pressable style={styles.header}>
+                        <Image source={{uri: post.author.image}} style={styles.userImage}></Image>
+                        <View>
+                            <Text style={styles.username}>{post.author.name}</Text>
+                            <Text>{post.author.position}</Text>
+                        </View>
+                    </Pressable>
+                </Link>
                 {/* Text Content */}
                 <Text style={styles.postContent}>{post.content}</Text>
                 {/* Image Content */}

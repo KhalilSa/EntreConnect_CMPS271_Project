@@ -22,7 +22,8 @@ const PostStyles = () => {
   const styles = StyleSheet.create({
     container: {
       backgroundColor: Colors[colorTheme ?? 'light'].feedBackground,
-      gap: 6
+      gap: 6,
+      alignSelf: 'center'
     },
     title: {
       fontSize: 20,
