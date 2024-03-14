@@ -24,7 +24,7 @@ export default function Login() {
         <Text style={styles.buttonText}>Sign In</Text>
       </TouchableOpacity>
       <Text style={styles.noAccountText}>
-        No account? <Text style={styles.signUpText} onPress={() => {/* nav to Sign Up imp */}}>Sign up</Text>
+        No account? <Text style={styles.signUpText} onPress={() => navigation.navigate('signup')}>Sign up</Text>
       </Text>
       <TouchableOpacity style={styles.googleButton}>
         <Text style={styles.googleButtonText}>Login with Google</Text>
