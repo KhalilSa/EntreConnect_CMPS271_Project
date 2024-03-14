@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, TextInput, TouchableOpacity, Text, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 export default function SignUp() {
   return (
@@ -30,7 +31,7 @@ export default function SignUp() {
         <Text style={styles.buttonText}>Sign Up</Text>
       </TouchableOpacity>
       <Text style={styles.noAccountText}>
-        Already have an account? <Text style={styles.signUpText} onPress={() => {/* nav to Sign In imp */}}>Sign in</Text>
+        Already have an account? <Text style={styles.signUpText} onPress={() => navigation.navigate('Login')}>Sign in</Text>
       </Text>
     </View>
   );
