@@ -14,3 +14,12 @@ export type Author = {
     position: string;
     image?: string;
 };
+
+export type User = {
+    id: string,
+    name: string,
+    position: string,
+    image?: string,
+    backImage?: string,
+    about?: string
+}
