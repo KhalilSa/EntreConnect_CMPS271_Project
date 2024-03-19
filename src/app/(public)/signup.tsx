@@ -2,11 +2,18 @@ import React from 'react';
 import { StyleSheet, TextInput, TouchableOpacity, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-export default function Login() {
+export default function SignUp() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>EntreConnect</Text>
       <Text style={styles.subtitle}>We would pay you to use our app, please!</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        keyboardType="email-address"
+        autoCapitalize="none"
+        autoCorrect={false}
+      />
       <TextInput
         style={styles.input}
         placeholder="Username"
@@ -21,14 +28,11 @@ export default function Login() {
         autoCorrect={false}
       />
       <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Sign In</Text>
+        <Text style={styles.buttonText}>Sign Up</Text>
       </TouchableOpacity>
       <Text style={styles.noAccountText}>
-        No account? <Text style={styles.signUpText} onPress={() => navigation.navigate('signup')}>Sign up</Text>
+        Already have an account? <Text style={styles.signUpText} onPress={() => navigation.navigate('Login')}>Sign in</Text>
       </Text>
-      <TouchableOpacity style={styles.googleButton}>
-        <Text style={styles.googleButtonText}>Login with Google</Text>
-      </TouchableOpacity>
     </View>
   );
 }
@@ -41,11 +45,6 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#FFFFFF', 
   },
-  titleContainer: {
-    width: '100%',
-    alignItems: 'center',
-    marginBottom: 30,
-  },
   title: {
     fontSize: 100,
     fontWeight: 'bold',
@@ -55,10 +54,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#888888',
     marginTop: 8,
-  },
-  inputContainer: {
-    width: '80%',
-    alignItems: 'center',
   },
   input: {
     width: '30%',
@@ -88,18 +83,5 @@ const styles = StyleSheet.create({
   signUpText: {
     color: '#5e2a84',
     fontWeight: 'bold',
-  },
-  googleButton: {
-    marginTop: 10,
-    backgroundColor: '#FFFFFF',
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    width: '30%',
-    alignItems: 'center',
-    padding: 10,
-  },
-  googleButtonText: {
-    color: '#000000',
   },
 });
