@@ -1,0 +1,125 @@
+[
+    {
+      "id": "1",
+      "title": "Project Alpha",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      "image": "https://dummyimage.com/50x50/000/fff",
+      "members": [
+        {
+          "id": "101",
+          "name": "John Doe",
+          "position": "Developer",
+          "profile_image": "https://dummyimage.com/50x50/000/fff"
+        },
+        {
+          "id": "102",
+          "name": "Alice Smith",
+          "position": "Designer",
+          "profile_image": "https://dummyimage.com/50x50/000/fff"
+        }
+      ],
+      "bookmarks": 3,
+      "size": 1,
+      "capacity": 2
+    },
+    {
+      "id": "2",
+      "title": "Project Beta",
+      "description": "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "image": "https://dummyimage.com/50x50/000/fff",
+      "members": [
+        {
+          "id": 103,
+          "name": "Bob Johnson",
+          "position": "Manager",
+          "profile_image": "https://dummyimage.com/50x50/000/fff"
+        }
+      ],
+      "bookmarks": 5,
+      "size": 1,
+      "capacity": 2
+    },
+    {
+      "id": "3",
+      "title": "Project Gamma",
+      "image": "https://dummyimage.com/50x50/000/fff",
+      "description": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      "members": [
+        {
+          "id": "104",
+          "name": "Emily Brown",
+          "position": "Tester",
+          "profile_image": "https://dummyimage.com/50x50/000/fff"
+        },
+        {
+          "id": "105",
+          "name": "Michael Wilson",
+          "position": "Developer",
+          "profile_image": "https://dummyimage.com/50x50/000/fff"
+        },
+        {
+          "id": "23123",
+          "name": "Michael Wilson",
+          "position": "Developer",
+          "profile_image": "https://dummyimage.com/50x50/000/fff"
+        },
+        {
+          "id": "1341",
+          "name": "Michael Wilson",
+          "position": "Developer",
+          "profile_image": "https://dummyimage.com/50x50/000/fff"
+        }
+      ],
+      "bookmarks": 2,
+      "size": 1,
+      "capacity": 2
+    },
+    {
+      "id": "4",
+      "title": "Project Delta",
+      "description": "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+      "members": [],
+      "bookmarks": 1,
+      "size": 0,
+      "capacity": 2
+    },
+    {
+      "id": "5",
+      "title": "Project Epsilon",
+      "description": "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      "members": [
+        {
+          "id": "106",
+          "name": "Sophia Rodriguez",
+          "position": "Designer",
+          "profile_image": "https://dummyimage.com/50x50/000/fff"
+        }
+      ],
+      "bookmarks": 0,
+      "size": 1,
+      "capacity": 2
+    },
+    {
+      "id": "6",
+      "title": "Project Zeta",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      "members": [
+        {
+          "id": "107",
+          "name": "David Lee",
+          "position": "Developer",
+          "profile_image": "https://dummyimage.com/50x50/000/fff"
+        },
+        {
+          "id": "108",
+          "name": "Olivia Taylor",
+          "position": "Manager",
+          "profile_image": "https://dummyimage.com/50x50/000/fff"
+        }
+      ],
+      "bookmarks": 4,
+      "size": 1,
+      "capacity": 2
+    }
+  ]
+  

@@ -8,6 +8,17 @@ export type Post = {
     maxConnection: number;
 };
 
+
+export type Project = {
+    id: string;
+    title: string;
+    description: string;
+    members: Author[];
+    bookmarks: number;
+    size: number;
+    capacity: number;
+}
+
 export type Author = {
     id: string;
     name: string;

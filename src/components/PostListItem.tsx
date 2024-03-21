@@ -5,11 +5,12 @@ import { useColorScheme } from './useColorScheme';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Colors from '@/constants/Colors';
 import { Link, useNavigation } from 'expo-router';
+import ViewMoreText from 'react-native-view-more-text';
 
 
 type PostListItemProps = {
     post: Post;
-    style: ViewStyle;
+    style?: ViewStyle;
 }
 
 type FooterButtonProps = {
@@ -29,6 +30,9 @@ function FooterButton({ text, icon, footerBtnStyle, colorScheme }: FooterButtonP
 }
 
 export default function PostListItem({ post, style }: PostListItemProps) {
+    type OnPressFunction = () => void;
+    const renderViewMore = (onPress: OnPressFunction) =>  <Text onPress={onPress}>View more</Text>;
+    const renderViewLess = (onPress: OnPressFunction) =>  <Text onPress={onPress}>View less</Text>;
     const colorScheme = Colors[useColorScheme() ?? 'light'];
     const styles = PostStyles();
     const combinedPostCardStyles = [styles.postCard, style];
@@ -44,7 +48,13 @@ export default function PostListItem({ post, style }: PostListItemProps) {
                         <Image source={{uri: post.author.image}} style={styles.userImage}></Image>
                         <View>
                             <Text style={styles.username}>{post.author.name}</Text>
-                            <Text>{post.author.position}</Text>
+                            <ViewMoreText
+                                numberOfLines={2}
+                                renderViewMore={renderViewMore}
+                                renderViewLess={renderViewLess}
+                            >
+                                <Text> {post.author.position} </Text>
+                            </ViewMoreText>
                         </View>
                     </Pressable>
                 </Link>
