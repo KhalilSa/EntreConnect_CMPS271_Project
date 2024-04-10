@@ -30,5 +30,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 ## Backend
 Postgraphile: combines postgresql, graphql, nodejs
 
-https://postgraphile.org/postgraphile/next/usage
-https://postgraphile.org/postgraphile/next/usage-library
+https://postgraphile.org/postgraphile/current
+https://postgraphile.org/postgraphile/current/usage
+https://postgraphile.org/postgraphile/current/usage-library
+
