@@ -33,4 +33,10 @@ Postgraphile: combines postgresql, graphql, nodejs
 https://postgraphile.org/postgraphile/current
 https://postgraphile.org/postgraphile/current/usage
 https://postgraphile.org/postgraphile/current/usage-library
+install: npm install postgraphile express (you might have to install other things, but its mentioned in the docs)
+post.js file references a postgresql database, create your own on your computer and change the url in post.js accordingly
+
+### client side integration
+apollo graphql client that connects to the postgraphile server. you can query from the client which i successfully did, but i couldn't render the output on the webpage itself.
+https://www.apollographql.com/docs/react/
 
