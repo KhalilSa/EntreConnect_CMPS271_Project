@@ -40,3 +40,4 @@ post.js file references a postgresql database, create your own on your computer 
 apollo graphql client that connects to the postgraphile server. you can query from the client which i successfully did, but i couldn't render the output on the webpage itself.
 https://www.apollographql.com/docs/react/
 
+found an example : https://github.com/GraphQLGuide/guide-react-native (this will be third attempt at integration)
