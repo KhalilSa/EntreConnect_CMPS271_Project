@@ -7,6 +7,26 @@ import { Ionicons } from '@expo/vector-icons';
 import { Text, View } from '@/components/Themed';
 import { router } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
+import {gql, useMutation} from "@apollo/client"
+
+const insertPost = gql`
+  mutation MyMutation($content: String!, $image: String, $authorID: ID) {
+    insertPost(
+      content: $content
+      image: $image
+      authorid: $authorID
+      maxconnection: 10
+      bookmarks:0
+      connections:0
+    ) {
+      content
+      id
+      image
+      maxconnection
+      authorid
+    }
+  }
+`;
 
 type Img = {
   uri: string
@@ -16,11 +36,19 @@ export default function PostScreen() {
   const [description, setDescription] = useState('');
   const [images, setImages] = useState<Img[]>([]);
 
-  const handlePost = () => {
-    console.log('Post description:', description);
-    // Handle post action
-    setDescription('');
-    router.push('/(tabs)/');
+  const [execPost, {loading, error, data}] = useMutation(insertPost);
+
+  const handlePost = async () => {
+    console.warn(`Posting: ${description}`);
+    try {
+      await execPost({ variables: { description, userId: 1 } });
+
+      router.push('/(tabs)/');
+      setDescription('');
+      setImages([]);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const handleAddMedia = async () => {
@@ -37,10 +65,6 @@ export default function PostScreen() {
       setImages([...images, {uri: result.assets[0].uri}]);
     }
   };
-
-  // const handleAddMedia = () => {
-  //   setImages([...images, { uri: 'https://via.placeholder.com/100' }]);
-  // };
 
   const handleRemoveImage = (index: number) => {
     setImages(images.filter((_, imgIndex) => imgIndex !== index));
@@ -78,7 +102,9 @@ export default function PostScreen() {
             <Ionicons name="image" size={32} color="#5e2a84" />
           </TouchableOpacity>
           <TouchableOpacity style={styles.postButton} onPress={handlePost}>
-            <Text style={styles.postText}>Post</Text>
+            <Text style={styles.postText}>
+              {loading ? 'Posting...' : 'Post'}
+            </Text>
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>

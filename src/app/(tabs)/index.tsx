@@ -3,7 +3,6 @@ import { Text, View } from '@/components/Themed';
 import { useColorScheme } from '@/components/useColorScheme';
 import PostListItem from '@/components/PostListItem';
 import Colors from '@/constants/Colors';
-import posts from '../../../data/posts.json'
 import { gql, useQuery } from '@apollo/client';
 
 const postList = gql`
