@@ -2,7 +2,7 @@ export type Post = {
     id: string;
     content: string;
     image?: string;
-    author: Author;
+    profile: Author;
     bookmarks: number;
     connections: number;
     maxConnection: number;
@@ -13,6 +13,7 @@ export type Project = {
     id: string;
     title: string;
     description: string;
+    image?: string;
     members: Author[];
     bookmarks: number;
     size: number;

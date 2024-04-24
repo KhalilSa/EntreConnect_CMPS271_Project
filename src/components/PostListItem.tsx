@@ -36,28 +36,29 @@ export default function PostListItem({ post, style }: PostListItemProps) {
     const colorScheme = Colors[useColorScheme() ?? 'light'];
     const styles = PostStyles();
     const combinedPostCardStyles = [styles.postCard, style];
+    const navigation = useNavigation();
+    console.log(post)
     return (
-        <Link href={{
-            pathname: "posts/[id]",
-            params: {id: post.id}
-        }} asChild>
+        <Link href={`posts/${post.id}`} asChild>
             <Pressable style={StyleSheet.flatten(combinedPostCardStyles)}>
                 {/* Header */}
-                <Link href={`users/${post.author.id}`}>
-                    <Pressable style={styles.header}>
-                        <Image source={{uri: post.author.image}} style={styles.userImage}></Image>
-                        <View>
-                            <Text style={styles.username}>{post.author.name}</Text>
-                            <ViewMoreText
-                                numberOfLines={2}
-                                renderViewMore={renderViewMore}
-                                renderViewLess={renderViewLess}
-                            >
-                                <Text> {post.author.position} </Text>
-                            </ViewMoreText>
-                        </View>
-                    </Pressable>
-                </Link>
+                {post.profile && (
+                    <View style={{margin: 12, marginBottom: 0}}>
+                        <Pressable style={styles.header} onPress={() => navigation.navigate(`users/${post.profile.id}`)}>
+                            <Image source={{uri: post.profile.image}} style={styles.userImage}></Image>
+                            <View>
+                                <Text style={styles.username}>{post.profile.name}</Text>
+                                <ViewMoreText
+                                    numberOfLines={2}
+                                    renderViewMore={renderViewMore}
+                                    renderViewLess={renderViewLess}
+                                >
+                                    <Text> {post.profile.position} </Text>
+                                </ViewMoreText>
+                            </View>
+                        </Pressable>
+                    </View>
+                )}
                 {/* Text Content */}
                 <Text style={styles.postContent}>{post.content}</Text>
                 {/* Image Content */}
@@ -98,9 +99,7 @@ const PostStyles = () => {
         header: {
             flexDirection: 'row',
             alignItems: 'center',
-            gap: 8,
-            margin: 12,
-            marginBottom: 0,
+            gap: 8
         },
         username: {
             fontWeight: 'bold',

@@ -6,6 +6,8 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 
 import { useColorScheme } from '@/components/useColorScheme';
+import { ApolloProvider } from '@apollo/client';
+import client from '@/apollo/Client';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -48,14 +50,18 @@ function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-        <Stack.Screen name="posts/[id]" options={{ title: 'Post Details' }} />
-        <Stack.Screen name="auth/login" options={{ title: 'Login' }} />
-        <Stack.Screen name="auth/signup" options={{ title: 'Sign Up' }} />
-      </Stack>
-    </ThemeProvider>
+    <ApolloProvider client={client}>
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="posts/[id]" options={{ title: 'Post Details' }} />
+          <Stack.Screen name="auth/login" options={{ title: 'Login' }} />
+          <Stack.Screen name="users/[id]" options={{ headerShown: false }} />
+          <Stack.Screen name="(public)/signup" options={{ title: 'Sign Up' }} />
+          <Stack.Screen name="(public)/login" options={{ title: 'Login In' }} />
+
+        </Stack>
+      </ThemeProvider>
+    </ApolloProvider>
   );
 }

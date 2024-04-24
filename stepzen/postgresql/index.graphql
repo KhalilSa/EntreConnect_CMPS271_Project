@@ -1,0 +1,391 @@
+type Experience {
+  companyimage: String!
+  companyname: String!
+  id: ID!
+  profile: Profile @materializer(query: "profileUsingExperience_userid_fkey")
+  title: String!
+  userid: ID
+}
+
+type Post {
+  authorid: ID
+  bookmarks: Int!
+  connections: Int!
+  content: String!
+  id: ID!
+  image: String
+  maxconnection: Int!
+  profile: Profile @materializer(query: "profileUsingPost_authorid_fkey")
+}
+
+type Profile {
+  about: String
+  authid: String
+  backimage: String
+  experience: [Experience]
+    @materializer(query: "experienceUsingExperience_userid_fkey")
+  id: ID!
+  image: String
+  name: String!
+  position: String!
+  post: [Post] @materializer(query: "postUsingPost_authorid_fkey")
+}
+
+type Project {
+  bookmarks: Int!
+  capacity: Int!
+  description: String!
+  id: ID!
+  image: String
+  size: Int!
+  title: String!
+}
+
+"""
+The following queries are just a set of examples of how to access your schema.
+Feel free to modify them or aggregate more.
+"""
+type Query {
+  " Queries for type 'Experience' "
+  experience(id: ID!): Experience
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "experience"
+      configuration: "postgresql_config"
+    )
+  experienceList: [Experience]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "experience"
+      configuration: "postgresql_config"
+    )
+  experiencePaginatedList(first: Int, after: Int): [Experience]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT "companyimage", "companyname", "id", "title", "userid" FROM "experience" ORDER BY "id" LIMIT $1 OFFSET $2
+      """
+      configuration: "postgresql_config"
+    )
+  experienceUsingExperience_userid_fkey(id: ID!): [Experience]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT "companyimage", "companyname", "id", "title", "userid" FROM "experience" WHERE "userid" = $1
+      """
+      configuration: "postgresql_config"
+    )
+  " Queries for type 'Post' "
+  post(id: ID!): Post
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "post"
+      configuration: "postgresql_config"
+    )
+  postList: [Post]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "post"
+      configuration: "postgresql_config"
+    )
+  postPaginatedList(first: Int, after: Int): [Post]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT "authorid", "bookmarks", "connections", "content", "id", "image", "maxconnection" FROM "post" ORDER BY "id" LIMIT $1 OFFSET $2
+      """
+      configuration: "postgresql_config"
+    )
+  postUsingPost_authorid_fkey(id: ID!): [Post]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT "authorid", "bookmarks", "connections", "content", "id", "image", "maxconnection" FROM "post" WHERE "authorid" = $1
+      """
+      configuration: "postgresql_config"
+    )
+  " Queries for type 'Profile' "
+  profile(id: ID!): Profile
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "profile"
+      configuration: "postgresql_config"
+    )
+  profileList: [Profile]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "profile"
+      configuration: "postgresql_config"
+    )
+  profilePaginatedList(first: Int, after: Int): [Profile]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT "about", "authid", "backimage", "id", "image", "name", "position" FROM "profile" ORDER BY "id" LIMIT $1 OFFSET $2
+      """
+      configuration: "postgresql_config"
+    )
+  profileUsingExperience_userid_fkey(userid: ID!): Profile
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT "about", "authid", "backimage", "id", "image", "name", "position" FROM "profile" WHERE "id" = $1
+      """
+      configuration: "postgresql_config"
+    )
+  profileUsingPost_authorid_fkey(authorid: ID!): Profile
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT "about", "authid", "backimage", "id", "image", "name", "position" FROM "profile" WHERE "id" = $1
+      """
+      configuration: "postgresql_config"
+    )
+  profileUsingprofile_authid_key(authid: String!): Profile
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT "about", "authid", "backimage", "id", "image", "name", "position" FROM "profile" WHERE "authid" = $1
+      """
+      configuration: "postgresql_config"
+    )
+  " Queries for type 'Project' "
+  project(id: ID!): Project
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "project"
+      configuration: "postgresql_config"
+    )
+  projectList: [Project]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "project"
+      configuration: "postgresql_config"
+    )
+  projectPaginatedList(first: Int, after: Int): [Project]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT "bookmarks", "capacity", "description", "id", "image", "size", "title" FROM "project" ORDER BY "id" LIMIT $1 OFFSET $2
+      """
+      configuration: "postgresql_config"
+    )
+}
+
+"""
+The following mutations are just a set of examples of how to access your schema.
+Feel free to modify them or aggregate more.
+"""
+type Mutation {
+  " Mutations for type 'Experience' "
+  deleteExperience(id: ID!): Experience
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "experience"
+      dml: DELETE
+      configuration: "postgresql_config"
+    )
+  insertExperience(
+    companyname: String!
+    companyimage: String!
+    userid: ID
+    title: String!
+  ): Experience
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "experience"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
+  updateExperience(
+    id: ID!
+    companyimage: String
+    companyname: String
+    title: String
+    userid: ID
+  ): Experience
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      UPDATE "experience" SET
+        "companyimage" = COALESCE($2, "companyimage"),
+        "companyname" = COALESCE($3, "companyname"),
+        "title" = COALESCE($4, "title"),
+        "userid" = COALESCE($5, "userid")
+      WHERE
+        "id" = $1
+      RETURNING *
+      """
+      configuration: "postgresql_config"
+    )
+  " Mutations for type 'Post' "
+  deletePost(id: ID!): Post
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "post"
+      dml: DELETE
+      configuration: "postgresql_config"
+    )
+  insertPost(
+    image: String
+    maxconnection: Int!
+    authorid: ID
+    content: String!
+    connections: Int!
+    bookmarks: Int!
+  ): Post
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "post"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
+  updatePost(
+    id: ID!
+    authorid: ID
+    bookmarks: Int
+    connections: Int
+    content: String
+    image: String
+    maxconnection: Int
+  ): Post
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      UPDATE "post" SET
+        "authorid" = COALESCE($2, "authorid"),
+        "bookmarks" = COALESCE($3, "bookmarks"),
+        "connections" = COALESCE($4, "connections"),
+        "content" = COALESCE($5, "content"),
+        "image" = COALESCE($6, "image"),
+        "maxconnection" = COALESCE($7, "maxconnection")
+      WHERE
+        "id" = $1
+      RETURNING *
+      """
+      configuration: "postgresql_config"
+    )
+  " Mutations for type 'Profile' "
+  deleteProfile(id: ID!): Profile
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "profile"
+      dml: DELETE
+      configuration: "postgresql_config"
+    )
+  insertProfile(
+    authid: String
+    name: String!
+    image: String
+    backimage: String
+    position: String!
+    about: String
+  ): Profile
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "profile"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
+  updateProfile(
+    id: ID!
+    about: String
+    authid: String
+    backimage: String
+    image: String
+    name: String
+    position: String
+  ): Profile
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      UPDATE "profile" SET
+        "about" = COALESCE($2, "about"),
+        "authid" = COALESCE($3, "authid"),
+        "backimage" = COALESCE($4, "backimage"),
+        "image" = COALESCE($5, "image"),
+        "name" = COALESCE($6, "name"),
+        "position" = COALESCE($7, "position")
+      WHERE
+        "id" = $1
+      RETURNING *
+      """
+      configuration: "postgresql_config"
+    )
+  " Mutations for type 'Project' "
+  deleteProject(id: ID!): Project
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "project"
+      dml: DELETE
+      configuration: "postgresql_config"
+    )
+  insertProject(
+    size: Int!
+    image: String
+    description: String!
+    title: String!
+    bookmarks: Int!
+    capacity: Int!
+  ): Project
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "project"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
+  updateProject(
+    id: ID!
+    bookmarks: Int
+    capacity: Int
+    description: String
+    image: String
+    size: Int
+    title: String
+  ): Project
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      UPDATE "project" SET
+        "bookmarks" = COALESCE($2, "bookmarks"),
+        "capacity" = COALESCE($3, "capacity"),
+        "description" = COALESCE($4, "description"),
+        "image" = COALESCE($5, "image"),
+        "size" = COALESCE($6, "size"),
+        "title" = COALESCE($7, "title")
+      WHERE
+        "id" = $1
+      RETURNING *
+      """
+      configuration: "postgresql_config"
+    )
+}

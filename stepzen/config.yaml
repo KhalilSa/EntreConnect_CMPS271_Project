@@ -1,0 +1,4 @@
+configurationset:
+  - configuration:
+      name: postgresql_config
+      uri: postgresql://ep-frosty-cherry-a2lpx4uw.eu-central-1.aws.neon.tech/EntreConnectDB?user=EntreConnectDB_owner&password=f0LjX6YzBxRv
