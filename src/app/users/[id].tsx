@@ -1,27 +1,58 @@
 import { Text, View } from "@/components/Themed";
 import { useLocalSearchParams, useNavigation } from "expo-router";
 import { useLayoutEffect, useState } from "react";
-import users from '../../../data/user.json'
-import { User } from '../../types'
-import { Pressable, ScrollView, Image, StyleSheet, TouchableOpacity } from "react-native";
+import { ActivityIndicator, ScrollView, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { useColorScheme } from "react-native";
 import ExperienceListItem from '@/components/ExperienceListItem'
+import { gql, useQuery } from "@apollo/client"
+import { Experience } from "@/types";
 
+const query = gql`
+  query MyQuery($id: ID!) {
+    profile(id: $id) {
+      image
+      name
+      position
+      id
+      authid
+      backimage
+      about
+      experience {
+        companyimage
+        companyname
+        title
+        userid
+        id
+      }
+    }
+  }
+`
 
 export default function UserProfile() {
-    const [user, setUser] = useState<User>(users);
     const { id } = useLocalSearchParams();
+    const {loading, error, data} = useQuery(query, {variables: {id}});
     const navigation = useNavigation();
     const styles = PostStyles();
+    const user = data?.profile;
   
     useLayoutEffect(() => {
-      navigation.setOptions({ title: user.name });
+      navigation.setOptions({ title: user?.name || "USER" });
     }, [user]);
+
+    
+
+    if (loading) {
+      return <ActivityIndicator></ActivityIndicator>
+    }
+  
+    if (error) {
+      return <Text>Issue with fetching the data</Text>
+    }
   
     return (
       <ScrollView>
         <View style={styles.headerContainer}>
-          <Image source={{ uri: user.backImage }} style={styles.backImage} />
+          <Image source={{ uri: user.backimage }} style={styles.backImage} />
           <View style={styles.headerContent}>
             <Image source={{ uri: user.image }} style={styles.image} />
   
@@ -43,7 +74,7 @@ export default function UserProfile() {
   
         <View style={styles.container}>
           <Text style={styles.title}>Experience</Text>
-          {user.experience?.map((experience) => (
+          {user.experience?.map((experience: Experience) => (
             <ExperienceListItem experience={experience} key={experience.id} />
           ))}
         </View>

@@ -7,7 +7,26 @@ import { Ionicons } from '@expo/vector-icons';
 import { Text, View } from '@/components/Themed';
 import { router } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
+import {gql, useMutation} from '@apollo/client'
+import { useUserContext } from '@/context/UserContext';
 
+const insertPost = gql`
+  mutation insertPost($content: String!, $image: String, $authorID: ID, $maxConnections: Int!) {
+    insertPost(
+      content: $content
+      image: $image
+      authorid: $authorID
+      maxconnection: $maxConnections
+      bookmarks:0
+      connections:0
+    ) {
+      content
+      id
+      image
+      maxconnection
+      authorid
+    }
+  }`;
 type Img = {
   uri: string
 };
@@ -15,12 +34,29 @@ type Img = {
 export default function PostScreen() {
   const [description, setDescription] = useState('');
   const [images, setImages] = useState<Img[]>([]);
+  const { dbUser } = useUserContext();
 
-  const handlePost = () => {
-    console.log('Post description:', description);
-    // Handle post action
-    setDescription('');
-    router.push('/(tabs)/');
+  console.log(dbUser.id);
+
+  const [execMutation, {loading, error, data}] = useMutation(insertPost);
+
+  const handlePost = async () => {
+    console.warn(`Posting: ${description}`);
+    try {
+      await execMutation({ 
+        variables: {
+         content: description, 
+         authorID: dbUser.id,
+         image: images[0]?.uri || null,
+         maxConnections: 10
+        }});
+
+      router.push('/(tabs)/');
+      setDescription('');
+      setImages([]);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const handleAddMedia = async () => {
@@ -37,10 +73,6 @@ export default function PostScreen() {
       setImages([...images, {uri: result.assets[0].uri}]);
     }
   };
-
-  // const handleAddMedia = () => {
-  //   setImages([...images, { uri: 'https://via.placeholder.com/100' }]);
-  // };
 
   const handleRemoveImage = (index: number) => {
     setImages(images.filter((_, imgIndex) => imgIndex !== index));
@@ -78,7 +110,9 @@ export default function PostScreen() {
             <Ionicons name="image" size={32} color="#5e2a84" />
           </TouchableOpacity>
           <TouchableOpacity style={styles.postButton} onPress={handlePost}>
-            <Text style={styles.postText}>Post</Text>
+            <Text style={styles.postText}>
+              {loading ? 'Posting' : 'Post'}
+            </Text>
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>

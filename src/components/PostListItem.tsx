@@ -4,7 +4,7 @@ import { Post } from '@/types'
 import { useColorScheme } from './useColorScheme';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Colors from '@/constants/Colors';
-import { Link, useNavigation } from 'expo-router';
+import { router } from 'expo-router';
 import ViewMoreText from 'react-native-view-more-text';
 
 
@@ -36,51 +36,47 @@ export default function PostListItem({ post, style }: PostListItemProps) {
     const colorScheme = Colors[useColorScheme() ?? 'light'];
     const styles = PostStyles();
     const combinedPostCardStyles = [styles.postCard, style];
-    const navigation = useNavigation();
-    console.log(post)
+
     return (
-        <Link href={`posts/${post.id}`} asChild>
-            <Pressable style={StyleSheet.flatten(combinedPostCardStyles)}>
-                {/* Header */}
-                {post.profile && (
-                    <View style={{margin: 12, marginBottom: 0}}>
-                        <Pressable style={styles.header} onPress={() => navigation.navigate(`users/${post.profile.id}`)}>
-                            <Image source={{uri: post.profile.image}} style={styles.userImage}></Image>
-                            <View>
-                                <Text style={styles.username}>{post.profile.name}</Text>
-                                <ViewMoreText
-                                    numberOfLines={2}
-                                    renderViewMore={renderViewMore}
-                                    renderViewLess={renderViewLess}
-                                >
-                                    <Text> {post.profile.position} </Text>
-                                </ViewMoreText>
-                            </View>
-                        </Pressable>
-                    </View>
-                )}
-                {/* Text Content */}
-                <Text style={styles.postContent}>{post.content}</Text>
-                {/* Image Content */}
-                {post.image && (
-                    <Image source={{uri: post.image}} style={styles.postImage}></Image>
-                )}
-                <View style={styles.postStats}>
-                    <Text>{post.connections}/{post.maxConnection} Connections</Text>
-                    <Text>•</Text>
-                    <Text>{post.bookmarks} Bookmarks</Text>
+        <Pressable style={StyleSheet.flatten(combinedPostCardStyles)} onPress={() => router.navigate(`posts/${post.id}`)}>
+            {/* Header */}
+            {post.profile && (
+                <View style={{margin: 12, marginBottom: 0}}>
+                    <Pressable style={styles.header} onPress={() => router.navigate(`users/${post.profile.id}`)}>
+                        <Image source={{uri: post.profile.image}} style={styles.userImage}></Image>
+                        <View>
+                            <Text style={styles.username}>{post.profile.name}</Text>
+                            <ViewMoreText
+                                numberOfLines={2}
+                                renderViewMore={renderViewMore}
+                                renderViewLess={renderViewLess}
+                            >
+                                <Text> {post.profile.position} </Text>
+                            </ViewMoreText>
+                        </View>
+                    </Pressable>
                 </View>
-                {/* Footer */}
-                <View style={styles.line} />
-                <View style={{flexDirection: 'row', justifyContent: 'center', borderRadius: 20}}>
-                    <View style={{flexDirection: 'row', gap: 28, padding: 6}}>
-                        <FooterButton text='Connect' icon='users' footerBtnStyle={styles.footerBtn} colorScheme={colorScheme}></FooterButton>
-                        <FooterButton text='Bookmark' icon='bookmark' footerBtnStyle={styles.footerBtn} colorScheme={colorScheme}></FooterButton>
-                    </View>
+            )}
+            {/* Text Content */}
+            <Text style={styles.postContent}>{post.content}</Text>
+            {/* Image Content */}
+            {post.image && (
+                <Image source={{uri: post.image}} style={styles.postImage}></Image>
+            )}
+            <View style={styles.postStats}>
+                <Text>{post.connections}/{post.maxconnection} Connections</Text>
+                <Text>•</Text>
+                <Text>{post.bookmarks} Bookmarks</Text>
+            </View>
+            {/* Footer */}
+            <View style={styles.line} />
+            <View style={{flexDirection: 'row', justifyContent: 'center', borderRadius: 20}}>
+                <View style={{flexDirection: 'row', gap: 28, padding: 6}}>
+                    <FooterButton text='Connect' icon='users' footerBtnStyle={styles.footerBtn} colorScheme={colorScheme}></FooterButton>
+                    <FooterButton text='Bookmark' icon='bookmark' footerBtnStyle={styles.footerBtn} colorScheme={colorScheme}></FooterButton>
                 </View>
-            </Pressable>
-        </Link>
-        
+            </View>
+        </Pressable>
     );
 }
 

@@ -4,10 +4,34 @@ import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
-
+import { ActivityIndicator } from 'react-native';
 import { useColorScheme } from '@/components/useColorScheme';
 import { ApolloProvider } from '@apollo/client';
+import { ClerkProvider, SignedIn, SignedOut } from '@clerk/clerk-expo';
 import client from '@/apollo/Client';
+import * as SecureStore from "expo-secure-store";
+import AuthScreen from '@/components/auth/AuthScreen';
+import CreateProfileScreen from '@/components/auth/CreateProfileScreen'
+import UserContextProvider, { useUserContext } from '@/context/UserContext';
+
+const CLERK_API_KEY = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY ?? '';
+const tokenCache = {
+  async getToken(key: string) {
+    try {
+      return SecureStore.getItemAsync(key);
+    } catch (err) {
+      return null;
+    }
+  },
+  async saveToken(key: string, value: string) {
+    try {
+      return SecureStore.setItemAsync(key, value);
+    } catch (err) {
+      return;
+    }
+  },
+};
+
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -43,25 +67,53 @@ export default function RootLayout() {
     return null;
   }
 
-  return <RootLayoutNav />;
+  return <RootLayoutNavWithProviders />;
 }
 
-function RootLayoutNav() {
+function RootLayoutNavWithProviders() {
   const colorScheme = useColorScheme();
 
   return (
-    <ApolloProvider client={client}>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="posts/[id]" options={{ title: 'Post Details' }} />
-          <Stack.Screen name="auth/login" options={{ title: 'Login' }} />
-          <Stack.Screen name="users/[id]" options={{ headerShown: false }} />
-          <Stack.Screen name="(public)/signup" options={{ title: 'Sign Up' }} />
-          <Stack.Screen name="(public)/login" options={{ title: 'Login In' }} />
+    <ClerkProvider
+      publishableKey={CLERK_API_KEY}
+      tokenCache={tokenCache}
+    >
+      <ApolloProvider client={client}>
+        <UserContextProvider>
+          <ThemeProvider
+            value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
+          >
+            <RootLayoutNav />
+          </ThemeProvider>
+        </UserContextProvider>
+      </ApolloProvider>
+    </ClerkProvider>
+  );
+}
 
-        </Stack>
-      </ThemeProvider>
-    </ApolloProvider>
+function RootLayoutNav() {
+  const { dbUser, loading } = useUserContext();
+
+  if (loading) {
+    return <ActivityIndicator />;
+  }
+
+  return (
+    <>
+      <SignedIn>
+        {!dbUser ? (
+          <CreateProfileScreen />
+        ) : (
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+            <Stack.Screen name="posts/[id]" options={{ title: 'Post' }} />
+          </Stack>
+        )}
+      </SignedIn>
+      <SignedOut>
+        <AuthScreen />
+      </SignedOut>
+    </>
   );
 }

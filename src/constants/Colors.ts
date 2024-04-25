@@ -15,6 +15,8 @@ export default {
     feedBackground: white,
     postIconDefault: pantone,
     postIconSelected: eminence,
+    titleCapital: eminence,
+    titleSmall: raisenBlack,
   },
   dark: {
     text: white,
@@ -26,5 +28,7 @@ export default {
     feedBackground: raisenBlack,
     postIconDefault: white,
     postIconSelected: pantone,
+    titleCapital: eminence,
+    titleSmall: raisenBlack
   },
 };

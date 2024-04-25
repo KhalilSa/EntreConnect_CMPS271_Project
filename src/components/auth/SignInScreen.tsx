@@ -1,6 +1,5 @@
 import React from 'react';
 import { StyleSheet, TextInput, TouchableOpacity, Text, View } from 'react-native';
-import { router } from 'expo-router';
 import { useColorScheme } from '@/components/useColorScheme';
 import Colors from '@/constants/Colors';
 import { useSignIn } from '@clerk/clerk-expo';
@@ -19,7 +18,7 @@ const useWarmUpBrowser = () => {
 
 WebBrowser.maybeCompleteAuthSession();
 
-export default function Login() {
+export default function Login( { onSignUp } : any ) {
   const colorTheme = useColorScheme();
   const { signIn, setActive, isLoaded } = useSignIn();
  
@@ -38,7 +37,6 @@ export default function Login() {
  
       if (createdSessionId) {
         setActive({ session: createdSessionId });
-        router.replace('(tabs)/index');
       }
     } catch (err: any) {
       console.error("OAuth error", err);
@@ -60,7 +58,6 @@ export default function Login() {
       // This is an important step,
       // This indicates the user is signed in
       await setActive({ session: completeSignIn.createdSessionId });
-      router.navigate('(tabs)/index');
       console.log('Signed In correctly')
     } catch (err: any) {
       console.log(err);
@@ -105,7 +102,7 @@ export default function Login() {
           </View>
       </TouchableOpacity>
       <Text style={styles.noAccountText}>
-        No account? <Text style={styles.signUpText} onPress={() => router.navigate('/signup')}>Sign up</Text>
+        No account? <Text style={styles.signUpText} onPress={onSignUp}>Sign up</Text>
       </Text>
     </View>
   );
@@ -125,7 +122,7 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   title: {
-    fontSize: 60,
+    fontSize: 54,
     fontWeight: 'bold',
     color: '#5e2a84',
   },

@@ -1,11 +1,10 @@
 import React from 'react';
 import { StyleSheet, TextInput, TouchableOpacity, Text, View } from 'react-native';
-import { router } from 'expo-router';
 import { useColorScheme } from '@/components/useColorScheme';
 import Colors from '@/constants/Colors';
 import { useSignUp } from '@clerk/clerk-expo';
 
-export default function SignUp() {
+export default function SignUp( { onSignIn } : any ) {
   const { isLoaded, signUp, setActive } = useSignUp();
  
   const [firstName, setFirstName] = React.useState("");
@@ -58,7 +57,6 @@ export default function SignUp() {
       });
  
       await setActive({ session: completeSignUp.createdSessionId });
-      router.navigate('(tabs)/index');
     } catch (err: any) {
       console.error(JSON.stringify(err, null, 2));
       setErrorMessage(err.errors[0].longMessage ?? err.errors[0].message ?? "An error occurred");
@@ -120,7 +118,7 @@ export default function SignUp() {
             <Text style={styles.buttonText}>Sign Up</Text>
           </TouchableOpacity>
           <Text style={styles.noAccountText}>
-            Already have an account? <Text style={styles.signUpText} onPress={() => router.push('/login')}>Sign in</Text>
+            Already have an account? <Text style={styles.signUpText} onPress={onSignIn}>Sign in</Text>
           </Text>
         </View>
       )}
@@ -151,7 +149,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF', 
   },
   title: {
-    fontSize: 60,
+    fontSize: 54,
     fontWeight: 'bold',
     color: '#5e2a84',
   },
