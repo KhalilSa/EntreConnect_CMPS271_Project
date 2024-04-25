@@ -132,7 +132,23 @@ const styles = StyleSheet.create({
   threadContainer: {
     flexDirection: 'row',
     padding: 10,
+    padding: 10,
+  },
+  threadContainer: {
+    flexDirection: 'row',
+    padding: 10,
     alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  avatar: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginRight: 10,
+  },
+  threadDetails: {
+    flex: 1,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
   },
@@ -148,6 +164,16 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: 'bold',
+  },
+  lastMessage: {
+    fontSize: 14,
+    color: 'grey',
+  },
+  backButton: {
+    position: 'absolute',
+    top: 10,
+    left: 10,
+    zIndex: 1,
   },
   lastMessage: {
     fontSize: 14,
