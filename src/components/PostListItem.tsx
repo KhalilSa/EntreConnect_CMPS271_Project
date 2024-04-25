@@ -44,7 +44,11 @@ export default function PostListItem({ post, style }: PostListItemProps) {
             {post.profile && (
                 <View style={{margin: 12, marginBottom: 0}}>
                     <Pressable style={styles.header} onPress={() => router.navigate(`users/${post.profile.id}`)}>
-                        <UserAvatar size={60} name={post.profile.name} style={styles.userImage}/>
+                        {post.profile.image ? (
+                            <Image source={{ uri: post.profile.image }} style={styles.userImage} />
+                        ) : (
+                            <UserAvatar size={60} name={post.profile.name} style={styles.userImage}/>
+                        ) }
                         <View>
                             <Text style={styles.username}>{post.profile.name}</Text>
                             <ViewMoreText

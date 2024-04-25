@@ -55,7 +55,11 @@ export default function UserProfile() {
         <View style={styles.headerContainer}>
           <Image source={{ uri: user.backimage ?? "https://dummyimage.com/600x400/000/fff	"}} style={styles.backImage} />
           <View style={styles.headerContent}>
-            <UserAvatar size={60} name={user.name} style={styles.image}/>
+            {user.image ? (
+                <Image source={{ uri: user.image }} style={styles.image} />
+            ) : (
+                <UserAvatar size={60} name={user.name} style={styles.image}/>
+            )}
   
             <Text style={styles.name}>{user.name}</Text>
             <Text>{user.position}</Text>
