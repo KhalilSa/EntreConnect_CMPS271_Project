@@ -6,6 +6,7 @@ import { useColorScheme } from "react-native";
 import ExperienceListItem from '@/components/ExperienceListItem'
 import { gql, useQuery } from "@apollo/client"
 import { Experience } from "@/types";
+import UserAvatar from 'react-native-user-avatar';
 
 const query = gql`
   query MyQuery($id: ID!) {
@@ -52,9 +53,9 @@ export default function UserProfile() {
     return (
       <ScrollView>
         <View style={styles.headerContainer}>
-          <Image source={{ uri: user.backimage }} style={styles.backImage} />
+          <Image source={{ uri: user.backimage ?? "https://dummyimage.com/600x400/000/fff	"}} style={styles.backImage} />
           <View style={styles.headerContent}>
-            <Image source={{ uri: user.image }} style={styles.image} />
+            <UserAvatar size={60} name={user.name} style={styles.image}/>
   
             <Text style={styles.name}>{user.name}</Text>
             <Text>{user.position}</Text>
@@ -74,6 +75,9 @@ export default function UserProfile() {
   
         <View style={styles.container}>
           <Text style={styles.title}>Experience</Text>
+          {user.experience.length === 0 && (
+            <Text>No experience provided</Text>
+          )}
           {user.experience?.map((experience: Experience) => (
             <ExperienceListItem experience={experience} key={experience.id} />
           ))}

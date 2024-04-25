@@ -38,7 +38,9 @@ export default function PostScreen() {
 
   console.log(dbUser.id);
 
-  const [execMutation, {loading, error, data}] = useMutation(insertPost);
+  const [execMutation, {loading, error, data}] = useMutation(insertPost, {
+    refetchQueries: ['postPaginatedListQuery']
+  });
 
   const handlePost = async () => {
     console.warn(`Posting: ${description}`);

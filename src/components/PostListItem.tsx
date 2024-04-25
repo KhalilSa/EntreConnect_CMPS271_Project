@@ -6,6 +6,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Colors from '@/constants/Colors';
 import { router } from 'expo-router';
 import ViewMoreText from 'react-native-view-more-text';
+import UserAvatar from 'react-native-user-avatar';
 
 
 type PostListItemProps = {
@@ -43,7 +44,7 @@ export default function PostListItem({ post, style }: PostListItemProps) {
             {post.profile && (
                 <View style={{margin: 12, marginBottom: 0}}>
                     <Pressable style={styles.header} onPress={() => router.navigate(`users/${post.profile.id}`)}>
-                        <Image source={{uri: post.profile.image}} style={styles.userImage}></Image>
+                        <UserAvatar size={60} name={post.profile.name} style={styles.userImage}/>
                         <View>
                             <Text style={styles.username}>{post.profile.name}</Text>
                             <ViewMoreText

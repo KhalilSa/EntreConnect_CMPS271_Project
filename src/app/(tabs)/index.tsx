@@ -26,9 +26,9 @@ const postPaginatedList = gql`
 `
 export default function HomeFeedScreen() {
   const [hasMore, setHasMore] = useState(true);
-  const { loading, error, data, fetchMore } = useQuery(postPaginatedList, {variables: {first: 5}});
+  const { loading, error, data, fetchMore, refetch } = useQuery(postPaginatedList, {variables: {first: 5}});
   const [loadedPosts, setLoadedPosts] = useState([]);
-  const [latestPost, setLatestPost] = useState(null);
+  // const [latestPost, setLatestPost] = useState(null);
   const styles = PostStyles();
 
   useEffect(() => {
@@ -37,25 +37,25 @@ export default function HomeFeedScreen() {
     }
   }, [data]);
 
-  const showRecent = async () => {
-    console.log("trying to reload new post")
-    try {
-      // Fetch the latest post
-      const res = await fetchMore({
-        variables: { first: 1, after: 0 },
-      });
+  // const showRecent = async () => {
+  //   console.log("trying to reload new post")
+  //   try {
+  //     // Fetch the latest post
+  //     const res = await fetchMore({
+  //       variables: { first: 1, after: 0 },
+  //     });
   
-      // Check if the latest post ID is different from the top post ID
-      const latestPostData = res.data.postPaginatedList[0];
-      console.log(latestPostData)
-      if (res.data.postPaginatedList.length > 0 && latestPostData.id !== loadedPosts[0]?.id) {
-        setLatestPost(latestPostData);
-        setLoadedPosts([latestPostData, ...loadedPosts]);
-      }
-    } catch (error) {
-      console.error('Error fetching latest post:', error);
-    }
-  };
+  //     // Check if the latest post ID is different from the top post ID
+  //     const latestPostData = res.data.postPaginatedList[0];
+  //     console.log(latestPostData)
+  //     if (res.data.postPaginatedList.length > 0 && latestPostData.id !== loadedPosts[0]?.id) {
+  //       setLatestPost(latestPostData);
+  //       setLoadedPosts([latestPostData, ...loadedPosts]);
+  //     }
+  //   } catch (error) {
+  //     console.error('Error fetching latest post:', error);
+  //   }
+  // };
 
   const loadMore = async () => {
     if (!hasMore) return;
@@ -82,12 +82,14 @@ export default function HomeFeedScreen() {
       contentContainerStyle={styles.container}
       showsVerticalScrollIndicator={false}
       onEndReached={loadMore}
-      onScroll={(event) => {
-        const offsetY = event.nativeEvent.contentOffset.y;
-        if (offsetY === 0) {
-          showRecent();
-        }
-      }}
+      refreshing={loading}
+      onRefresh={refetch}
+      // onScroll={(event) => {
+      //   const offsetY = event.nativeEvent.contentOffset.y;
+      //   if (offsetY === 0) {
+      //     showRecent();
+      //   }
+      // }}
     />
   );
 }
@@ -96,6 +98,7 @@ const PostStyles = () => {
   const colorTheme = useColorScheme();
   const styles = StyleSheet.create({
     container: {
+      width: '100%',
       backgroundColor: Colors[colorTheme ?? 'light'].feedBackground,
       gap: 6,
       alignSelf: 'center'
