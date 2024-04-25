@@ -1,22 +1,18 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
+import { getDatabase } from 'firebase/database';
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCo6T6wZfK8pJYONsl_uJxOjPjmhu6O5Ic",
-    authDomain: "test2-b5df8.firebaseapp.com",
-    projectId: "test2-b5df8",
-    storageBucket: "test2-b5df8.appspot.com",
-    messagingSenderId: "473665564520",
-    appId: "1:473665564520:web:94f80b224db47119b770dd",
-    measurementId: "G-H92YHG4XNP"
+    apiKey: "AIzaSyDijVK9_L3-yFe0J1DiSjbjI7goYqYocxE",
+    authDomain: "test3-31ef5.firebaseapp.com",
+    projectId: "test3-31ef5",
+    storageBucket: "test3-31ef5.appspot.com",
+    messagingSenderId: "822688839726",
+    appId: "1:822688839726:web:7a18760e1a799de49f07bf",
+    measurementId: "G-MLRK27EZ25",
+  databaseURL: "https://test3-31ef5-default-rtdb.firebaseio.com/"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
 
-// Get instances for Firebase services
-const auth = getAuth(app);
-
-// Export the Firebase services you want to use
-export { auth };
+export { database };

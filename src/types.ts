@@ -5,7 +5,7 @@ export type Post = {
     profile: Author;
     bookmarks: number;
     connections: number;
-    maxConnection: number;
+    maxconnection: number;
 };
 
 
@@ -32,7 +32,7 @@ export type User = {
     name: string,
     position: string,
     image?: string,
-    backImage?: string,
+    backimage?: string,
     about?: string,
     experience: Experience[];
 }
@@ -40,6 +40,6 @@ export type User = {
 export type Experience = {
     id: string,
     title: string,
-    companyName: string,
-    companyImage: string
+    companyname: string,
+    companyimage: string
 }

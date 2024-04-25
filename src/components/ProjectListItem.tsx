@@ -1,7 +1,7 @@
 import { Text, View } from '@/components/Themed'
 import { Project } from '@/types'
 import { Image, Pressable, StyleSheet, ViewStyle } from 'react-native';
-import { Link } from 'expo-router';
+import { router } from 'expo-router';
 import ViewMoreText from 'react-native-view-more-text';
 
 type ProjectListItemProps = {
@@ -15,7 +15,7 @@ export default function ProjectListItem({ project } : ProjectListItemProps) {
     const renderViewLess = (onPress: OnPressFunction) =>  <Text onPress={onPress}>View less</Text>;
 
     return (
-        <Link href={`posts/${project.id}`} style={styles.container}>
+        <Pressable onPress={() => router.navigate(`posts/${project.id}`)} style={styles.container}>
             <Pressable style={styles.header}>
                 <Image source={{uri: project.image ?? "https://dummyimage.com/50x50/000/fff"}} style={styles.img}></Image>
                 <View>
@@ -45,7 +45,7 @@ export default function ProjectListItem({ project } : ProjectListItemProps) {
                 </View>
             </Pressable>
             
-        </Link>
+        </Pressable>
     );
 }
 

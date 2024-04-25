@@ -1,20 +1,43 @@
 import { Text } from '@/components/Themed';
 import { useLocalSearchParams } from 'expo-router';
-import posts from '../../../data/posts.json';
 import PostListItem from '@/components/PostListItem';
-import { ScrollView, StyleSheet } from 'react-native';
+import { ActivityIndicator, ScrollView, StyleSheet } from 'react-native';
+import {gql, useQuery} from '@apollo/client';
+
+const query = gql`
+  query MyQuery($id: ID!) {
+    post(id: $id) {
+      id
+      content
+      image
+      maxconnection
+      connections
+      bookmarks
+      profile {
+        id
+        image
+        name
+        position
+      }
+    }
+  }
+`
 
 const PostDetails = () => {
   const { id } = useLocalSearchParams();
-  const post = posts.find((p) => p.id === id);
+  const {loading, error, data} = useQuery(query, {variables: {id}});
 
-  if (!post) {
-    return <Text>Not found</Text>;
+  if (loading) {
+    return <ActivityIndicator></ActivityIndicator>
+  }
+
+  if (error) {
+    return <Text>Issue with fetching the data</Text>
   }
 
   return (
     <ScrollView>
-        <PostListItem post={post} style={styles.postCard} />
+        <PostListItem post={data.post} style={styles.postCard} />
     </ScrollView>
   );
 };
@@ -22,6 +45,7 @@ const PostDetails = () => {
 const styles = StyleSheet.create({
     postCard: {
         alignSelf: 'center',
+        width: '98%'
     }
 });
 

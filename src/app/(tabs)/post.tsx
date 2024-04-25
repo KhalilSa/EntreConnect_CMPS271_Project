@@ -7,6 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Text, View } from '@/components/Themed';
 import { router } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
+<<<<<<< HEAD
 import {gql, useMutation} from "@apollo/client"
 
 const insertPost = gql`
@@ -27,7 +28,28 @@ const insertPost = gql`
     }
   }
 `;
+=======
+import {gql, useMutation} from '@apollo/client'
+import { useUserContext } from '@/context/UserContext';
+>>>>>>> backend
 
+const insertPost = gql`
+  mutation insertPost($content: String!, $image: String, $authorID: ID, $maxConnections: Int!) {
+    insertPost(
+      content: $content
+      image: $image
+      authorid: $authorID
+      maxconnection: $maxConnections
+      bookmarks:0
+      connections:0
+    ) {
+      content
+      id
+      image
+      maxconnection
+      authorid
+    }
+  }`;
 type Img = {
   uri: string
 };
@@ -35,13 +57,32 @@ type Img = {
 export default function PostScreen() {
   const [description, setDescription] = useState('');
   const [images, setImages] = useState<Img[]>([]);
+  const { dbUser } = useUserContext();
 
+<<<<<<< HEAD
   const [execPost, {loading, error, data}] = useMutation(insertPost);
+=======
+  console.log(dbUser.id);
+
+  const [execMutation, {loading, error, data}] = useMutation(insertPost, {
+    refetchQueries: ['postPaginatedListQuery']
+  });
+>>>>>>> backend
 
   const handlePost = async () => {
     console.warn(`Posting: ${description}`);
     try {
+<<<<<<< HEAD
       await execPost({ variables: { description, userId: 1 } });
+=======
+      await execMutation({ 
+        variables: {
+         content: description, 
+         authorID: dbUser.id,
+         image: images[0]?.uri || null,
+         maxConnections: 10
+        }});
+>>>>>>> backend
 
       router.push('/(tabs)/');
       setDescription('');
@@ -103,7 +144,11 @@ export default function PostScreen() {
           </TouchableOpacity>
           <TouchableOpacity style={styles.postButton} onPress={handlePost}>
             <Text style={styles.postText}>
+<<<<<<< HEAD
               {loading ? 'Posting...' : 'Post'}
+=======
+              {loading ? 'Posting' : 'Post'}
+>>>>>>> backend
             </Text>
           </TouchableOpacity>
         </View>

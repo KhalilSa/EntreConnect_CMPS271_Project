@@ -99,7 +99,7 @@ type Query {
       type: "postgresql"
       schema: "public"
       query: """
-      SELECT "authorid", "bookmarks", "connections", "content", "id", "image", "maxconnection" FROM "post" ORDER BY "id" LIMIT $1 OFFSET $2
+      SELECT "authorid", "bookmarks", "connections", "content", "id", "image", "maxconnection" FROM "post" ORDER BY "id" DESC LIMIT $1 OFFSET $2
       """
       configuration: "postgresql_config"
     )
@@ -133,6 +133,15 @@ type Query {
       schema: "public"
       query: """
       SELECT "about", "authid", "backimage", "id", "image", "name", "position" FROM "profile" ORDER BY "id" LIMIT $1 OFFSET $2
+      """
+      configuration: "postgresql_config"
+    )
+  profileSearch(term: String): [Profile]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT "about", "authid", "backimage", "id", "image", "name", "position" FROM "profile" WHERE name ILIKE $1 OR position ILIKE $1
       """
       configuration: "postgresql_config"
     )
