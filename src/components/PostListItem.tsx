@@ -1,5 +1,5 @@
 import {Text, View} from '@/components/Themed'
-import { Image, Pressable, StyleSheet, ViewStyle } from 'react-native';
+import { Image, Pressable, StyleSheet, ViewStyle, Button } from 'react-native';
 import { Post } from '@/types'
 import { useColorScheme } from './useColorScheme';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
@@ -7,7 +7,7 @@ import Colors from '@/constants/Colors';
 import { router } from 'expo-router';
 import ViewMoreText from 'react-native-view-more-text';
 import UserAvatar from 'react-native-user-avatar';
-
+import { useState, useEffect } from 'react';
 
 type PostListItemProps = {
     post: Post;
@@ -18,19 +18,33 @@ type FooterButtonProps = {
     text: string,
     icon: React.ComponentProps<typeof FontAwesome>['name'],
     footerBtnStyle: ViewStyle,
-    colorScheme: Record<string, string>;
+    colorScheme: Record<string, string>,
+    buttonColor: string,
+    behaviorFunc: (event) => void;
 }
 
-function FooterButton({ text, icon, footerBtnStyle, colorScheme }: FooterButtonProps) {
+function FooterButton({ text, icon, footerBtnStyle, colorScheme, buttonColor, behaviorFunc }: FooterButtonProps) {
+
+
     return (
         <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
             <FontAwesome name={icon} size={24} color={colorScheme.postIconDefault} />
-            <Text style={footerBtnStyle}>{text}</Text>
+            <Button title={text} color={buttonColor} onPress={behaviorFunc} ></Button>
         </View>
     );
 }
 
 export default function PostListItem({ post, style }: PostListItemProps) {
+
+    const [color, setColor] = useState("#0000ff")
+
+    function handleBookmarkClick(){
+
+        if(color =="#0000ff") setColor("#841584")
+        else setColor("#0000ff")
+    }
+
+
     type OnPressFunction = () => void;
     const renderViewMore = (onPress: OnPressFunction) =>  <Text onPress={onPress}>View more</Text>;
     const renderViewLess = (onPress: OnPressFunction) =>  <Text onPress={onPress}>View less</Text>;
@@ -77,8 +91,8 @@ export default function PostListItem({ post, style }: PostListItemProps) {
             <View style={styles.line} />
             <View style={{flexDirection: 'row', justifyContent: 'center', borderRadius: 20}}>
                 <View style={{flexDirection: 'row', gap: 28, padding: 6}}>
-                    <FooterButton text='Connect' icon='users' footerBtnStyle={styles.footerBtn} colorScheme={colorScheme}></FooterButton>
-                    <FooterButton text='Bookmark' icon='bookmark' footerBtnStyle={styles.footerBtn} colorScheme={colorScheme}></FooterButton>
+                    <FooterButton text='Connect' icon='users' footerBtnStyle={styles.footerBtn} colorScheme={colorScheme} buttonColor='#0000ff' behaviorFunc={() => 1}></FooterButton>
+                    <FooterButton text='Bookmark' icon='bookmark' footerBtnStyle={styles.footerBtn} colorScheme={colorScheme} buttonColor={color} behaviorFunc={handleBookmarkClick}></FooterButton>
                 </View>
             </View>
         </Pressable>
