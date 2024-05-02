@@ -66,6 +66,16 @@ function FooterButton({ text, icon, footerBtnStyle, colorScheme, handleConnect, 
 }
 
 export default function PostListItem({ post, style }: PostListItemProps) {
+
+    const [color, setColor] = useState("#0000ff")
+
+    function handleBookmarkClick(){
+
+        if(color =="#0000ff") setColor("#841584")
+        else setColor("#0000ff")
+    }
+
+
     type OnPressFunction = () => void;
     const renderViewMore = (onPress: OnPressFunction) =>  <Text onPress={onPress}>View more</Text>;
     const renderViewLess = (onPress: OnPressFunction) =>  <Text onPress={onPress}>View less</Text>;
