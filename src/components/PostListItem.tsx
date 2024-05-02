@@ -46,25 +46,6 @@ type FooterButtonProps = {
     disabled?: boolean;
 }
 
-function FooterButton({ text, icon, footerBtnStyle, colorScheme, handleConnect, disabled }: FooterButtonProps) {
-    return (
-        <Pressable style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}} onPress={handleConnect} disabled={disabled}>
-            {disabled ?
-                <>
-                <FontAwesome name={icon} size={24} color={colorScheme.tabIconDefault} />
-                <Text style={footerBtnStyle}>{text+"ed"}</Text>
-                </>
-            : 
-                <>
-                <FontAwesome name={icon} size={24} color={colorScheme.postIconDefault} />
-                <Text style={footerBtnStyle}>{text}</Text>
-                </>
-            }
-            
-        </Pressable>
-    );
-}
-
 export default function PostListItem({ post, style }: PostListItemProps) {
 
     const [color, setColor] = useState("#0000ff")
@@ -85,6 +66,25 @@ export default function PostListItem({ post, style }: PostListItemProps) {
     const { dbUser } = useUserContext();
     const [isConnected, setIsConnected] = useState(false);
     const combinedPostCardStyles = [styles.postCard, style];
+
+    function FooterButton({ text, icon, footerBtnStyle, colorScheme, handleConnect, disabled }: FooterButtonProps) {
+        return (
+            <Pressable style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}} onPress={handleConnect} disabled={disabled}>
+                {disabled || dbUser.id === post.authorid ?
+                    <>
+                    <FontAwesome name={icon} size={24} color={colorScheme.tabIconDefault} />
+                    <Text style={footerBtnStyle}>{text+"ed"}</Text>
+                    </>
+                : 
+                    <>
+                    <FontAwesome name={icon} size={24} color={colorScheme.postIconDefault} />
+                    <Text style={footerBtnStyle}>{text}</Text>
+                    </>
+                }
+                
+            </Pressable>
+        );
+    }
 
     const handleConnect = async () => {
         try {

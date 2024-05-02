@@ -4,6 +4,7 @@ schema
       "postgresql/index.graphql"
       "postgresql-01/index.graphql"
       "postgresql-02/index.graphql"
+      "postgresql-03/index.graphql"
     ]
   ) {
   query: Query

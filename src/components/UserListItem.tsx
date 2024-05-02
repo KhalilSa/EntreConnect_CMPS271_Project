@@ -5,11 +5,12 @@ import UserAvatar from 'react-native-user-avatar';
 
 type UserListItemProps = {
   user: User;
+  disabled?: boolean 
 };
 
-export default function UserListItem({ user }: UserListItemProps) {
+export default function UserListItem({ user, disabled }: UserListItemProps) {
   return (
-    <Link href={`/users/${user.id}`} asChild>
+    <Link href={`/users/${user.id}`} asChild disabled={disabled}>
       <Pressable style={styles.header}>
         {user.image ? (
             <Image source={{ uri: user.image }} style={styles.userImage} />

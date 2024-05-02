@@ -4,6 +4,11 @@ type Notifications {
   profile: Profile @materializer(query: "profileUsingNotifications_userid_fkey")
   status: String
   userid: ID
+  profileUsingFk_receiver_id: Profile
+    @materializer(query: "profileUsingFk_receiver_id")
+  profileUsingNotifications_userid_fkey: Profile
+    @materializer(query: "profileUsingNotifications_userid_fkey")
+  receiverid: ID
 }
 
 type Userconnections {
@@ -44,7 +49,7 @@ type Query {
       type: "postgresql"
       schema: "public"
       query: """
-      SELECT "id", "message", "status", "userid" FROM "notifications" ORDER BY "id" LIMIT $1 OFFSET $2
+      SELECT "id", "message", "receiverid", "status", "userid" FROM "notifications" ORDER BY "id" LIMIT $1 OFFSET $2
       """
       configuration: "postgresql_config"
     )
@@ -62,11 +67,10 @@ type Query {
       type: "postgresql"
       schema: "public"
       query: """
-      SELECT "id", "message", "status", "userid" FROM "notifications" WHERE "userid" = $1
+      SELECT "id", "message", "receiverid", "status", "userid" FROM "notifications" WHERE "userid" = $1
       """
       configuration: "postgresql_config"
     )
-
   sentNotificationsList(id: ID!): [Notifications]
     @dbquery(
       type: "postgresql"
@@ -76,6 +80,7 @@ type Query {
       """
       configuration: "postgresql_config"
     )
+
   postUsingUserconnections_postid_fkey(postid: ID!): Post
     @dbquery(
       type: "postgresql"
@@ -90,7 +95,7 @@ type Query {
       type: "postgresql"
       schema: "public"
       query: """
-      SELECT "about", "authid", "backimage", "id", "image", "name", "position" FROM "profile" WHERE "id" = $1
+      SELECT "about", "authid", "backimage", "credits", "id", "image", "name", "position" FROM "profile" WHERE "id" = $1
       """
       configuration: "postgresql_config"
     )
@@ -99,7 +104,7 @@ type Query {
       type: "postgresql"
       schema: "public"
       query: """
-      SELECT "about", "authid", "backimage", "id", "image", "name", "position" FROM "profile" WHERE "id" = $1
+      SELECT "about", "authid", "backimage", "credits", "id", "image", "name", "position" FROM "profile" WHERE "id" = $1
       """
       configuration: "postgresql_config"
     )
@@ -108,7 +113,7 @@ type Query {
       type: "postgresql"
       schema: "public"
       query: """
-      SELECT "about", "authid", "backimage", "id", "image", "name", "position" FROM "profile" WHERE "authid" = $1
+      SELECT "about", "authid", "backimage", "credits", "id", "image", "name", "position" FROM "profile" WHERE "id" = $1
       """
       configuration: "postgresql_config"
     )
@@ -208,8 +213,9 @@ type Mutation {
       query: """
       UPDATE "notifications" SET
         "message" = COALESCE($2, "message"),
-        "status" = COALESCE($3, "status"),
-        "userid" = COALESCE($4, "userid")
+        "receiverid" = COALESCE($3, "receiverid"),
+        "status" = COALESCE($4, "status"),
+        "userid" = COALESCE($5, "userid")
       WHERE
         "id" = $1
       RETURNING *
@@ -236,6 +242,22 @@ type Mutation {
       schema: "public"
       table: "userconnections"
       dml: INSERT
+      configuration: "postgresql_config"
+    )
+  SendCredits(senderId: ID!, receiverId: ID!, amount: Int!): Profile
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      UPDATE "profile"
+      SET "credits" = 
+          CASE 
+              WHEN "id" = $1 THEN "credits" - $3
+              WHEN "id" = $2 THEN "credits" + $3
+              ELSE "credits"
+          END
+      WHERE "id" IN ($1, $2)
+      """
       configuration: "postgresql_config"
     )
   updateUserconnections(

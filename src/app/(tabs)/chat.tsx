@@ -22,14 +22,18 @@ export default function ChatScreen() {
   const [currentThread, setCurrentThread] = useState(null);
   const [messages, setMessages] = useState([]);
   const { dbUser } = useUserContext();
-  const {loading, error, data} = useQuery(query, {
+  const {loading, error, data, refetch} = useQuery(query, {
     variables: {
       userId: dbUser.id,
     }
   });
-  const [threads, setThreads] = useState(data?.profilePaginatedListBasedOnConnections);
-  
-  console.log("threads: " + threads)
+  const [threads, setThreads] = useState([]);
+
+  useEffect(() => {
+    if (data?.profilePaginatedListBasedOnConnections) {
+      setThreads(data.profilePaginatedListBasedOnConnections);
+    }
+  }, [data]);
 
   useEffect(() => {
     if (currentThread) {
@@ -76,33 +80,34 @@ export default function ChatScreen() {
     />
   );
 
-  console.log(threads);
-
-  const renderChatList = () => (
-    <FlatList
-      data={threads ?? []}
-      keyExtractor={user => user.id}
-      renderItem={({ item }) => (
-        <TouchableOpacity onPress={() => setCurrentThread(item)} style={styles.threadContainer}>
-          <UserListItem user={item}></UserListItem>
-          {/* <Image source={{ uri: user.image }} style={styles.avatar} />
-          <View style={styles.threadDetails}>
-            <Text style={styles.title}>{user.name}</Text>
-            <Text style={styles.lastMessage}>{item.lastMessage}</Text>
-          </View> */}
-        </TouchableOpacity>
-      )}
-      showsVerticalScrollIndicator={false}
-    />
-  );
-
-  if (loading) {
-    return <ActivityIndicator></ActivityIndicator>
-  }
-
-  if (error) {
-    return <Text>An Error Has Occured</Text>
-  }
+  const renderChatList = () => {
+    if (loading) {
+      return <ActivityIndicator />;
+    }
+  
+    if (error) {
+      return <Text>An Error Has Occurred</Text>;
+    }
+  
+    if (!threads || threads.length === 0) {
+      return <Text>No chats available</Text>;
+    }
+  
+    return (
+      <FlatList
+        data={threads}
+        keyExtractor={user => user.id}
+        onRefresh={refetch}
+        refreshing={loading}
+        renderItem={({ item }) => (
+          <TouchableOpacity onPress={() => setCurrentThread(item)} style={styles.threadContainer}>
+            <UserListItem user={item}></UserListItem>
+          </TouchableOpacity>
+        )}
+        showsVerticalScrollIndicator={false}
+      />
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -116,7 +121,7 @@ export default function ChatScreen() {
             messages={messages}
             onSend={messages => onSend(messages)}
             user={{
-              _id: 1,
+              _id: dbUser.id,
               name: 'Demo User',
               avatar: 'https://placeimg.com/140/140/any',
             }}

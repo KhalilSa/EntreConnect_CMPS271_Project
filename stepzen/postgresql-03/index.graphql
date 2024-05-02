@@ -1,0 +1,24 @@
+"""
+The following queries are just a set of examples of how to access your schema.
+Feel free to modify them or aggregate more.
+"""
+type Query {
+  notificationsUsingFk_receiver_id(id: ID!): [Notifications]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT "id", "message", "receiverid", "status", "userid" FROM "notifications" WHERE "receiverid" = $1
+      """
+      configuration: "postgresql_config"
+    )
+  profileUsingFk_receiver_id(receiverid: ID!): Profile
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT "about", "authid", "backimage", "credits", "id", "image", "name", "position" FROM "profile" WHERE "id" = $1
+      """
+      configuration: "postgresql_config"
+    )
+}

@@ -37,6 +37,11 @@ type Profile {
     @materializer(query: "userconnectionsUsingUserconnections_receiverid_fkey")
   userconnectionsUsingUserconnections_senderid_fkey: [Userconnections]
     @materializer(query: "userconnectionsUsingUserconnections_senderid_fkey")
+  credits: Int
+  notificationsUsingFk_receiver_id: [Notifications]
+    @materializer(query: "notificationsUsingFk_receiver_id")
+  notificationsUsingNotifications_userid_fkey: [Notifications]
+    @materializer(query: "notificationsUsingNotifications_userid_fkey")
 }
 
 type Project {
@@ -74,7 +79,7 @@ type Query {
       type: "postgresql"
       schema: "public"
       query: """
-      SELECT "companyimage", "companyname", "id", "title", "userid" FROM "experience" LIMIT $1 OFFSET $2
+      SELECT "companyimage", "companyname", "id", "title", "userid" FROM "experience" ORDER BY "id" LIMIT $1 OFFSET $2
       """
       configuration: "postgresql_config"
     )
@@ -140,11 +145,15 @@ type Query {
       type: "postgresql"
       schema: "public"
       query: """
-      SELECT "about", "authid", "backimage", "id", "image", "name", "position" FROM "profile" LIMIT $1 OFFSET $2
+      SELECT "about", "authid", "backimage", "credits", "id", "image", "name", "position" FROM "profile" ORDER BY "id" LIMIT $1 OFFSET $2
       """
       configuration: "postgresql_config"
     )
-  profilePaginatedListBasedOnConnections(first: Int, after: Int, userId: ID!): [Profile]
+  profilePaginatedListBasedOnConnections(
+    first: Int
+    after: Int
+    userId: ID!
+  ): [Profile]
     @dbquery(
       type: "postgresql"
       schema: "public"
@@ -166,22 +175,12 @@ type Query {
       """
       configuration: "postgresql_config"
     )
-
-  postSearch(term: String): [Profile]
-    @dbquery(
-      type: "postgresql"
-      schema: "public"
-      query: """
-      SELECT "bookmarks", "authorid", "connections", "id", "image", "content", "maxconnection" FROM "post" WHERE content ILIKE $1
-      """
-      configuration: "postgresql_config"
-    )
   profileUsingExperience_userid_fkey(userid: ID!): Profile
     @dbquery(
       type: "postgresql"
       schema: "public"
       query: """
-      SELECT "about", "authid", "backimage", "id", "image", "name", "position" FROM "profile" WHERE "id" = $1
+      SELECT "about", "authid", "backimage", "credits", "id", "image", "name", "position" FROM "profile" WHERE "id" = $1
       """
       configuration: "postgresql_config"
     )
@@ -190,7 +189,7 @@ type Query {
       type: "postgresql"
       schema: "public"
       query: """
-      SELECT "about", "authid", "backimage", "id", "image", "name", "position" FROM "profile" WHERE "id" = $1
+      SELECT "about", "authid", "backimage", "credits", "id", "image", "name", "position" FROM "profile" WHERE "id" = $1
       """
       configuration: "postgresql_config"
     )
@@ -199,7 +198,7 @@ type Query {
       type: "postgresql"
       schema: "public"
       query: """
-      SELECT "about", "authid", "backimage", "id", "image", "name", "position" FROM "profile" WHERE "authid" = $1
+      SELECT "about", "authid", "backimage", "credits", "id", "image", "name", "position" FROM "profile" WHERE "authid" = $1
       """
       configuration: "postgresql_config"
     )
@@ -223,7 +222,7 @@ type Query {
       type: "postgresql"
       schema: "public"
       query: """
-      SELECT "bookmarks", "capacity", "description", "id", "image", "size", "title" FROM "project" LIMIT $1 OFFSET $2
+      SELECT "bookmarks", "capacity", "description", "id", "image", "size", "title" FROM "project" ORDER BY "id" LIMIT $1 OFFSET $2
       """
       configuration: "postgresql_config"
     )
@@ -369,9 +368,10 @@ type Mutation {
         "about" = COALESCE($2, "about"),
         "authid" = COALESCE($3, "authid"),
         "backimage" = COALESCE($4, "backimage"),
-        "image" = COALESCE($5, "image"),
-        "name" = COALESCE($6, "name"),
-        "position" = COALESCE($7, "position")
+        "credits" = COALESCE($5, "credits"),
+        "image" = COALESCE($6, "image"),
+        "name" = COALESCE($7, "name"),
+        "position" = COALESCE($8, "position")
       WHERE
         "id" = $1
       RETURNING *
