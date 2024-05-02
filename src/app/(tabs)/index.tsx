@@ -21,6 +21,7 @@ const postPaginatedList = gql`
       content
       bookmarks
       maxconnection
+      authorid
     }
   }
 `

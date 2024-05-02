@@ -1,4 +1,5 @@
 export type Post = {
+    authorid: string;
     id: string;
     content: string;
     image?: string;
@@ -35,6 +36,15 @@ export type User = {
     backimage?: string,
     about?: string,
     experience: Experience[];
+}
+
+export type Notification = {
+    profile: User;
+    id: string,
+    name: string,
+    position: string,
+    message: string,
+    status: string
 }
 
 export type Experience = {

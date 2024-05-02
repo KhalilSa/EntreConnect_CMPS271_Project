@@ -16,6 +16,8 @@ type Post {
   image: String
   maxconnection: Int!
   profile: Profile @materializer(query: "profileUsingPost_authorid_fkey")
+  userconnections: [Userconnections]
+    @materializer(query: "userconnectionsUsingUserconnections_postid_fkey")
 }
 
 type Profile {
@@ -29,6 +31,12 @@ type Profile {
   name: String!
   position: String!
   post: [Post] @materializer(query: "postUsingPost_authorid_fkey")
+  notifications: [Notifications]
+    @materializer(query: "notificationsUsingNotifications_userid_fkey")
+  userconnectionsUsingUserconnections_receiverid_fkey: [Userconnections]
+    @materializer(query: "userconnectionsUsingUserconnections_receiverid_fkey")
+  userconnectionsUsingUserconnections_senderid_fkey: [Userconnections]
+    @materializer(query: "userconnectionsUsingUserconnections_senderid_fkey")
 }
 
 type Project {
@@ -66,7 +74,7 @@ type Query {
       type: "postgresql"
       schema: "public"
       query: """
-      SELECT "companyimage", "companyname", "id", "title", "userid" FROM "experience" ORDER BY "id" LIMIT $1 OFFSET $2
+      SELECT "companyimage", "companyname", "id", "title", "userid" FROM "experience" LIMIT $1 OFFSET $2
       """
       configuration: "postgresql_config"
     )
@@ -132,7 +140,20 @@ type Query {
       type: "postgresql"
       schema: "public"
       query: """
-      SELECT "about", "authid", "backimage", "id", "image", "name", "position" FROM "profile" ORDER BY "id" LIMIT $1 OFFSET $2
+      SELECT "about", "authid", "backimage", "id", "image", "name", "position" FROM "profile" LIMIT $1 OFFSET $2
+      """
+      configuration: "postgresql_config"
+    )
+  profilePaginatedListBasedOnConnections(first: Int, after: Int, userId: ID!): [Profile]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT DISTINCT p.about, p.id, p.backimage, p.id, p.image, p.name, p.position
+      FROM profile p
+      INNER JOIN notifications n ON p.id = n.receiverid OR p.id = n.userid
+      WHERE (n.receiverid = $3 OR n.userid = $3)
+      LIMIT $1 OFFSET $2
       """
       configuration: "postgresql_config"
     )
@@ -142,6 +163,16 @@ type Query {
       schema: "public"
       query: """
       SELECT "about", "authid", "backimage", "id", "image", "name", "position" FROM "profile" WHERE name ILIKE $1 OR position ILIKE $1
+      """
+      configuration: "postgresql_config"
+    )
+
+  postSearch(term: String): [Profile]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT "bookmarks", "authorid", "connections", "id", "image", "content", "maxconnection" FROM "post" WHERE content ILIKE $1
       """
       configuration: "postgresql_config"
     )
@@ -192,7 +223,7 @@ type Query {
       type: "postgresql"
       schema: "public"
       query: """
-      SELECT "bookmarks", "capacity", "description", "id", "image", "size", "title" FROM "project" ORDER BY "id" LIMIT $1 OFFSET $2
+      SELECT "bookmarks", "capacity", "description", "id", "image", "size", "title" FROM "project" LIMIT $1 OFFSET $2
       """
       configuration: "postgresql_config"
     )

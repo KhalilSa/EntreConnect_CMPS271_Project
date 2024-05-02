@@ -16,6 +16,10 @@ export default function SettingsScreen() {
 
   return (
     <View style={styles.container}>
+
+      <TouchableOpacity style={styles.button} onPress={onSignOutPress}>
+        <Text style={styles.buttonText}>View My bookmarks</Text>
+      </TouchableOpacity>
       <TouchableOpacity style={styles.button} onPress={onSignOutPress}>
         <Text style={styles.buttonText}>Sign Out</Text>
       </TouchableOpacity>

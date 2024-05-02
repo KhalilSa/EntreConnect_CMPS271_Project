@@ -1,0 +1,24 @@
+"""
+The following queries are just a set of examples of how to access your schema.
+Feel free to modify them or aggregate more.
+"""
+type Query {
+  " Queries for type 'Experience' "
+  experienceByUserid(userid: ID!): [Experience]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "experience"
+      configuration: "postgresql_config"
+    )
+  experienceByUseridAndCompanyname(
+    userid: ID!
+    companyname: String!
+  ): [Experience]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "experience"
+      configuration: "postgresql_config"
+    )
+}

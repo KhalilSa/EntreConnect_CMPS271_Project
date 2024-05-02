@@ -18,7 +18,7 @@ const getUserQuery = gql`
 
 const UserContext = createContext({});
 
-const UserContextProvider = ({ children }: any) => {
+const UserContextProvider = ({ children, authId }: { children: React.ReactNode; authId: string }) => {
   const { user: authUser, isLoaded: isAuthLoaded } = useUser();
 
   const {
@@ -26,7 +26,7 @@ const UserContextProvider = ({ children }: any) => {
     loading: isDbLoading,
     refetch,
   } = useQuery(getUserQuery, {
-    variables: { authid: authUser?.id },
+    variables: { authid: authId || authUser?.id },
   });
 
   const dbUser = data?.profileUsingprofile_authid_key;

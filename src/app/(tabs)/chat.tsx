@@ -6,10 +6,11 @@ import { ref, onValue, push, serverTimestamp } from 'firebase/database';
 import { AntDesign } from '@expo/vector-icons';
 import UserListItem from '@/components/UserListItem';
 import { gql, useQuery } from '@apollo/client';
+import { useUserContext } from '@/context/UserContext';
 
 const query = gql`
-  query MyQuery {
-    profilePaginatedList {
+  query MyQuery($userId: ID!) {
+    profilePaginatedListBasedOnConnections(userId: $userId) {
       id
       image
       name
@@ -20,8 +21,13 @@ const query = gql`
 export default function ChatScreen() {
   const [currentThread, setCurrentThread] = useState(null);
   const [messages, setMessages] = useState([]);
-  const {loading, error, data} = useQuery(query);
-  const [threads, setThreads] = useState(data?.profilePaginatedList);
+  const { dbUser } = useUserContext();
+  const {loading, error, data} = useQuery(query, {
+    variables: {
+      userId: dbUser.id,
+    }
+  });
+  const [threads, setThreads] = useState(data?.profilePaginatedListBasedOnConnections);
   
   console.log("threads: " + threads)
 

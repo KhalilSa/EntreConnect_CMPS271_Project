@@ -1,0 +1,263 @@
+type Notifications {
+  id: ID!
+  message: String
+  profile: Profile @materializer(query: "profileUsingNotifications_userid_fkey")
+  status: String
+  userid: ID
+}
+
+type Userconnections {
+  id: ID!
+  post: Post @materializer(query: "postUsingUserconnections_postid_fkey")
+  postid: ID
+  profileUsingUserconnections_receiverid_fkey: Profile
+    @materializer(query: "profileUsingUserconnections_receiverid_fkey")
+  profileUsingUserconnections_senderid_fkey: Profile
+    @materializer(query: "profileUsingUserconnections_senderid_fkey")
+  receiverid: ID
+  senderid: ID
+  status: String
+}
+
+"""
+The following queries are just a set of examples of how to access your schema.
+Feel free to modify them or aggregate more.
+"""
+type Query {
+  " Queries for type 'Notifications' "
+  notifications(id: ID!): Notifications
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "notifications"
+      configuration: "postgresql_config"
+    )
+  notificationsList: [Notifications]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "notifications"
+      configuration: "postgresql_config"
+    )
+  notificationsPaginatedList(first: Int, after: Int): [Notifications]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT "id", "message", "status", "userid" FROM "notifications" ORDER BY "id" LIMIT $1 OFFSET $2
+      """
+      configuration: "postgresql_config"
+    )
+  receivedNotificationList(id: ID!): [Notifications]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT "id", "message", "status", "userid" FROM "notifications" WHERE "userid" = $1
+      """
+      configuration: "postgresql_config"
+    )
+  notificationsUsingNotifications_userid_fkey(id: ID!): [Notifications]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT "id", "message", "status", "userid" FROM "notifications" WHERE "userid" = $1
+      """
+      configuration: "postgresql_config"
+    )
+
+  sentNotificationsList(id: ID!): [Notifications]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT "id", "message", "status", "userid" FROM "notifications" WHERE "receiverid" = $1
+      """
+      configuration: "postgresql_config"
+    )
+  postUsingUserconnections_postid_fkey(postid: ID!): Post
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT "authorid", "bookmarks", "connections", "content", "id", "image", "maxconnection" FROM "post" WHERE "id" = $1
+      """
+      configuration: "postgresql_config"
+    )
+  profileUsingNotifications_userid_fkey(userid: ID!): Profile
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT "about", "authid", "backimage", "id", "image", "name", "position" FROM "profile" WHERE "id" = $1
+      """
+      configuration: "postgresql_config"
+    )
+  profileUsingUserconnections_receiverid_fkey(receiverid: ID!): Profile
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT "about", "authid", "backimage", "id", "image", "name", "position" FROM "profile" WHERE "id" = $1
+      """
+      configuration: "postgresql_config"
+    )
+  profileUsingUserconnections_senderid_fkey(senderid: ID!): Profile
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT "about", "authid", "backimage", "id", "image", "name", "position" FROM "profile" WHERE "authid" = $1
+      """
+      configuration: "postgresql_config"
+    )
+  " Queries for type 'Userconnections' "
+  userconnections(id: ID!): Userconnections
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "userconnections"
+      configuration: "postgresql_config"
+    )
+  userconnectionsList: [Userconnections]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "userconnections"
+      configuration: "postgresql_config"
+    )
+  userconnectionsPaginatedList(first: Int, after: Int): [Userconnections]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT "id", "postid", "receiverid", "senderid", "status" FROM "userconnections" ORDER BY "id" LIMIT $1 OFFSET $2
+      """
+      configuration: "postgresql_config"
+    )
+  userconnectionsUsingUserconnections_postid_fkey(id: ID!): [Userconnections]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT "id", "postid", "receiverid", "senderid", "status" FROM "userconnections" WHERE "postid" = $1
+      """
+      configuration: "postgresql_config"
+    )
+  userconnectionsUsingUserconnections_receiverid_fkey(
+    id: ID!
+  ): [Userconnections]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT "id", "postid", "receiverid", "senderid", "status" FROM "userconnections" WHERE "receiverid" = $1
+      """
+      configuration: "postgresql_config"
+    )
+  userconnectionsUsingUserconnections_senderid_fkey(
+    authid: ID!
+  ): [Userconnections]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT "id", "postid", "receiverid", "senderid", "status" FROM "userconnections" WHERE "senderid" = $1
+      """
+      configuration: "postgresql_config"
+    )
+}
+
+"""
+The following mutations are just a set of examples of how to access your schema.
+Feel free to modify them or aggregate more.
+"""
+type Mutation {
+  " Mutations for type 'Notifications' "
+  deleteNotifications(id: ID!): Notifications
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "notifications"
+      dml: DELETE
+      configuration: "postgresql_config"
+    )
+  insertNotifications(
+    status: String
+    message: String
+    userid: ID
+    receiverid: ID
+  ): Notifications
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "notifications"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
+  updateNotifications(
+    id: ID!
+    message: String
+    status: String
+    userid: ID
+  ): Notifications
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      UPDATE "notifications" SET
+        "message" = COALESCE($2, "message"),
+        "status" = COALESCE($3, "status"),
+        "userid" = COALESCE($4, "userid")
+      WHERE
+        "id" = $1
+      RETURNING *
+      """
+      configuration: "postgresql_config"
+    )
+  " Mutations for type 'Userconnections' "
+  deleteUserconnections(id: ID!): Userconnections
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "userconnections"
+      dml: DELETE
+      configuration: "postgresql_config"
+    )
+  insertUserconnections(
+    receiverid: ID
+    status: String
+    postid: ID
+    senderid: ID
+  ): Userconnections
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "userconnections"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
+  updateUserconnections(
+    id: ID!
+    postid: ID
+    receiverid: ID
+    senderid: ID
+    status: String
+  ): Userconnections
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      UPDATE "userconnections" SET
+        "postid" = COALESCE($2, "postid"),
+        "receiverid" = COALESCE($3, "receiverid"),
+        "senderid" = COALESCE($4, "senderid"),
+        "status" = COALESCE($5, "status")
+      WHERE
+        "id" = $1
+      RETURNING *
+      """
+      configuration: "postgresql_config"
+    )
+}
